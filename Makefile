@@ -1,5 +1,5 @@
-CC=g++
+CC=clang++ -std=gnu++11
 CFLAGS=-I.
 
-vmtranslator: parser.cpp builder.cpp main.cpp
-	$(CC) -o vmtranslator main.cpp parser.cpp builder.cpp
+vmtranslator: parser.cpp writer.cpp main.cpp
+	$(CC) -o vmtranslator main.cpp parser.cpp writer.cpp
