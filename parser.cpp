@@ -1,11 +1,11 @@
 #include "parser.h"
 #include <regex>
 #include <iostream>
+#include <string>
 
 int Parser::CommandType(std::string line){
     std::string subject(line);
-    std::string result;
-    int type = 3;
+    int type = PARSER_INVALID_COMMAND;
     try {
         std::regex pushPopRe(PUSHPOP_RE);
         std::regex operationRe(ARITH_RE);
@@ -26,7 +26,7 @@ void Parser::ProcessLine(int type, std::string line, Writer writer){
     switch(type){
         case PARSER_MEM_COMMAND:
         {
-            ParserResult result = *parser.PushPopParts(line);
+            ParserResult result = PushPopParts(line);
             writer.WritePushPop(result.arg1, result.arg2, result.arg3);
             break;
         }
@@ -37,9 +37,13 @@ void Parser::ProcessLine(int type, std::string line, Writer writer){
     }
 }
 
-ParserResult* Parser::PushPopParts(std::string line){
+ParserResult Parser::PushPopParts(std::string line){
     std::smatch match;
     std::regex re(PUSHPOP_RE);
     std::regex_search(line, match, re);
-    return new ParserResult(match[0], match[1], match[2]);
+    std::string arg1 = match.str(1);
+    std::string arg2 = match.str(2);
+    std::string arg3 = match.str(3);
+
+    return ParserResult(arg1, arg2, arg3);
 }

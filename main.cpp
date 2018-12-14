@@ -11,13 +11,9 @@ int main(int argc, char **argv){
     std::ifstream file(argv[1]); 
     std::string line;
     Parser parser;
-    Writer* writer = new Writer("./");
+    Writer* writer = new Writer("./test.asm", argv[2]);
     while(std::getline(file, line)){
-        std::istringstream iss(line);
-        std::cout << line;
-        std::cout << "\n";
         int type = parser.CommandType(line);
-        std::ofstream stream("./test.asm");
         parser.ProcessLine(type, line, *writer);
     }
     file.close();
